@@ -1,0 +1,606 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>植物大战僵尸Python版</title>
+  <!-- 引入外部资源 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- Tailwind 配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#4CAF50',     // 主绿色 - 植物主题
+            secondary: '#8D6E63',   // 次要棕色 - 土壤/僵尸主题
+            accent: '#F44336',      // 强调红色 - 警告/特殊元素
+            dark: '#1B5E20',        // 深绿色
+            light: '#E8F5E9',       // 浅绿色背景
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['"Baloo 2"', 'cursive'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <!-- 自定义工具类 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .text-shadow {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+      .animate-float {
+        animation: float 6s ease-in-out infinite;
+      }
+      .animate-pulse-slow {
+        animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      .parallax {
+        transform: translateY(var(--parallax-y, 0));
+        transition: transform 0.1s ease-out;
+      }
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0px); }
+    }
+  </style>
+  
+  <!-- 引入Google字体 -->
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="bg-light text-gray-800 overflow-x-hidden">
+  <!-- 导航栏 -->
+  <header id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-transparent">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <a href="#" class="flex items-center space-x-2">
+        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
+          <i class="fa fa-leaf text-white text-xl"></i>
+        </div>
+        <span class="font-display font-bold text-2xl text-white text-shadow">PVZ Python</span>
+      </a>
+      
+      <!-- 桌面导航 -->
+      <nav class="hidden md:flex items-center space-x-8">
+        <a href="#about" class="text-white hover:text-primary/80 transition-colors font-medium">关于游戏</a>
+        <a href="#download" class="text-white hover:text-primary/80 transition-colors font-medium">下载</a>
+        <a href="#faq" class="text-white hover:text-primary/80 transition-colors font-medium">常见问题</a>
+        <a href="https://gitcode.com/ZZJ-JACK/Pvz" target="_blank" class="bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-full transition-all transform hover:scale-105">
+          <i class="fa fa-code-fork mr-2"></i>Gitcode
+        </a>
+      </nav>
+      
+      <!-- 移动端菜单按钮 -->
+      <button id="menuBtn" class="md:hidden text-white text-2xl focus:outline-none">
+        <i class="fa fa-bars"></i>
+      </button>
+    </div>
+    
+    <!-- 移动端导航菜单 -->
+    <div id="mobileMenu" class="md:hidden bg-white shadow-lg absolute w-full left-0 top-full transform -translate-y-full opacity-0 transition-all duration-300 pointer-events-none">
+      <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
+        <a href="#about" class="text-gray-800 hover:text-primary py-2 border-b border-gray-100">关于游戏</a>
+        <a href="#download" class="text-gray-800 hover:text-primary py-2 border-b border-gray-100">下载</a>
+        <a href="#faq" class="text-gray-800 hover:text-primary py-2">常见问题</a>
+        <a href="https://gitcode.com/ZZJ-JACK/Pvz" target="_blank" class="bg-primary hover:bg-primary/90 text-white px-5 py-3 rounded-full text-center transition-all">
+          <i class="fa fa-code-fork mr-2"></i>Gitcode
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 英雄区域 -->
+  <section class="relative h-screen flex items-center justify-center overflow-hidden">
+    <!-- 背景图 -->
+    <div class="absolute inset-0 z-0">
+      <img src="https://cdn.luogu.com.cn/upload/image_hosting/noll5zi8.png" alt="植物大战僵尸游戏截图" class="w-full h-full object-cover">
+      <div class="absolute inset-0 bg-black/50"></div>
+    </div>
+    
+    <!-- 内容 -->
+    <div class="container mx-auto px-4 z-10 text-center">
+      <h1 class="font-display font-bold text-[clamp(2.5rem,8vw,5rem)] text-white leading-tight text-shadow mb-6 animate-fade-in-up">
+        植物大战僵尸<br><span class="text-primary">Python 中文复刻版</span>
+      </h1>
+      <p class="text-[clamp(1rem,3vw,1.5rem)] text-gray-100 max-w-3xl mx-auto mb-10 text-shadow">
+        经典游戏的Python重制版，原汁原味的游戏体验，开源免费，支持Windows平台
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="#download" class="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all transform hover:scale-105 hover:shadow-lg">
+          <i class="fa fa-download mr-2"></i>立即下载
+        </a>
+        <a href="#about" class="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border border-white/30 px-8 py-4 rounded-full text-lg font-semibold transition-all">
+          了解更多 <i class="fa fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+    </div>
+    
+    <!-- 向下滚动指示器 -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
+      <a href="#about" class="flex flex-col items-center">
+        <span class="mb-2 text-sm">向下滚动</span>
+        <i class="fa fa-chevron-down"></i>
+      </a>
+    </div>
+  </section>
+
+  <!-- 关于游戏 -->
+  <section id="about" class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16 reveal-element">
+        <h2 class="font-display font-bold text-[clamp(1.8rem,5vw,3rem)] text-gray-800 mb-4">关于游戏</h2>
+        <div class="w-24 h-1 bg-primary mx-auto mb-6"></div>
+        <p class="text-gray-600 max-w-3xl mx-auto text-lg">
+          PVZ Python 中文复刻版是经典游戏《植物大战僵尸》的非官方开源重制版，使用Python语言开发，保留了原作的核心玩法与乐趣。
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div class="reveal-element">
+          <img src="https://picsum.photos/id/106/600/400" alt="游戏截图" class="rounded-xl shadow-xl w-full h-auto transform hover:scale-[1.02] transition-transform duration-300">
+        </div>
+        <div class="space-y-6 reveal-element">
+          <div class="flex items-start">
+            <div class="bg-primary/10 p-3 rounded-full mr-4 mt-1">
+              <i class="fa fa-code text-primary text-xl"></i>
+            </div>
+            <div>
+              <h3 class="font-display font-bold text-xl mb-2">开源项目</h3>
+              <p class="text-gray-600">完全开源的项目，代码透明可查，欢迎开发者参与贡献，共同完善游戏功能。</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start">
+            <div class="bg-primary/10 p-3 rounded-full mr-4 mt-1">
+              <i class="fa fa-language text-primary text-xl"></i>
+            </div>
+            <div>
+              <h3 class="font-display font-bold text-xl mb-2">中文支持</h3>
+              <p class="text-gray-600">原生支持中文界面和中文语音，为中文用户提供更亲切的游戏体验。</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start">
+            <div class="bg-primary/10 p-3 rounded-full mr-4 mt-1">
+              <i class="fa fa-windows text-primary text-xl"></i>
+            </div>
+            <div>
+              <h3 class="font-display font-bold text-xl mb-2">Windows 兼容</h3>
+              <p class="text-gray-600">专为Windows系统优化，支持Windows 10及以上版本，运行流畅稳定。</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start">
+            <div class="bg-primary/10 p-3 rounded-full mr-4 mt-1">
+              <i class="fa fa-gamepad text-primary text-xl"></i>
+            </div>
+            <div>
+              <h3 class="font-display font-bold text-xl mb-2">原汁原味</h3>
+              <p class="text-gray-600">忠实还原原作的游戏机制、植物、僵尸和关卡设计，带来经典游戏体验。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 下载区域 -->
+  <section id="download" class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16 reveal-element">
+        <h2 class="font-display font-bold text-[clamp(1.8rem,5vw,3rem)] text-gray-800 mb-4">立即下载</h2>
+        <div class="w-24 h-1 bg-primary mx-auto mb-6"></div>
+        <p class="text-gray-600 max-w-3xl mx-auto text-lg">
+          下载Windows版本，开始你的植物大战僵尸之旅
+        </p>
+      </div>
+      
+      <div class="max-w-2xl mx-auto">
+        <!-- Windows 版本 -->
+        <div class="bg-gray-50 rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2 transition-transform reveal-element">
+          <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6 mx-auto">
+            <i class="fa fa-windows text-blue-600 text-3xl"></i>
+          </div>
+          <h3 class="font-display font-bold text-xl mb-2 text-center">Windows 版本</h3>
+          <p class="text-gray-600 text-center mb-6">支持 Windows 10 及以上版本</p>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-center text-gray-600">
+              <i class="fa fa-check text-primary mr-2"></i>
+              <span>一键安装程序</span>
+            </li>
+            <li class="flex items-center text-gray-600">
+              <i class="fa fa-check text-primary mr-2"></i>
+              <span>自动更新支持</span>
+            </li>
+            <li class="flex items-center text-gray-600">
+              <i class="fa fa-check text-primary mr-2"></i>
+              <span>64位系统优化</span>
+            </li>
+          </ul>
+          
+          <div id="downloadLinks" class="space-y-4">
+            <!-- 下载链接将通过JavaScript从downloads.txt加载 -->
+            <div class="text-center text-gray-500 py-4">
+              <i class="fa fa-spinner fa-spin mr-2"></i>正在加载下载链接...
+            </div>
+          </div>
+          
+          <div class="mt-8 text-center">
+            <a href="https://gitcode.com/ZZJ-JACK/Pvz" target="_blank" class="inline-flex items-center bg-gray-800 hover:bg-gray-900 text-white px-6 py-3 rounded-lg transition-colors">
+              <i class="fa fa-code-fork mr-3 text-xl"></i>
+              <span>查看 Gitcode 仓库</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 常见问题 -->
+  <section id="faq" class="py-20 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16 reveal-element">
+        <h2 class="font-display font-bold text-[clamp(1.8rem,5vw,3rem)] text-gray-800 mb-4">常见问题</h2>
+        <div class="w-24 h-1 bg-primary mx-auto mb-6"></div>
+        <p class="text-gray-600 max-w-3xl mx-auto text-lg">
+          关于 PVZ Python 中文复刻版的一些常见问题解答
+        </p>
+      </div>
+      
+      <div class="max-w-3xl mx-auto space-y-6 reveal-element">
+        <!-- FAQ 项目 -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-4 font-medium flex justify-between items-center focus:outline-none">
+            <span>这个复刻版与原版有什么区别？</span>
+            <i class="fa fa-chevron-down text-primary transition-transform duration-300"></i>
+          </button>
+          <div class="faq-content px-6 py-0 max-h-0 overflow-hidden transition-all duration-300">
+            <div class="pb-4 text-gray-600">
+              PVZ Python 中文复刻版保留了原版的核心玩法和内容，但使用Python语言重新开发，优化了高清显示支持，适配现代操作系统，并提供完整的中文支持。
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-4 font-medium flex justify-between items-center focus:outline-none">
+            <span>游戏是免费的吗？有广告吗？</span>
+            <i class="fa fa-chevron-down text-primary transition-transform duration-300"></i>
+          </button>
+          <div class="faq-content px-6 py-0 max-h-0 overflow-hidden transition-all duration-300">
+            <div class="pb-4 text-gray-600">
+              是的，PVZ Python 中文复刻版是完全免费的开源项目，不包含任何广告或内购。你可以自由下载、使用和分享游戏，也可以参与到项目的开发中。
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-4 font-medium flex justify-between items-center focus:outline-none">
+            <span>如何安装和运行游戏？</span>
+            <i class="fa fa-chevron-down text-primary transition-transform duration-300"></i>
+          </button>
+          <div class="faq-content px-6 py-0 max-h-0 overflow-hidden transition-all duration-300">
+            <div class="pb-4 text-gray-600">
+              只需下载Windows版本的安装程序，双击运行并按照提示完成安装即可。运行游戏需要系统安装Python 3.8或更高版本。
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-4 font-medium flex justify-between items-center focus:outline-none">
+            <span>我可以贡献代码或素材吗？</span>
+            <i class="fa fa-chevron-down text-primary transition-transform duration-300"></i>
+          </button>
+          <div class="faq-content px-6 py-0 max-h-0 overflow-hidden transition-all duration-300">
+            <div class="pb-4 text-gray-600">
+              当然欢迎！项目托管在Gitcode上，你可以提交Issue报告bug或建议新功能，也可以Fork仓库并提交Pull Request贡献代码。关于素材贡献，请查看项目贡献指南中的具体要求。
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-4 font-medium flex justify-between items-center focus:outline-none">
+            <span>游戏会支持移动设备吗？</span>
+            <i class="fa fa-chevron-down text-primary transition-transform duration-300"></i>
+          </button>
+          <div class="faq-content px-6 py-0 max-h-0 overflow-hidden transition-all duration-300">
+            <div class="pb-4 text-gray-600">
+              目前没有开发移动设备版本的计划，PVZ Python 中文复刻版仅针对Windows平台开发和优化。
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="container mx-auto px-4">
+      <div class="grid md:grid-cols-3 gap-8 mb-12">
+        <div>
+          <div class="flex items-center space-x-2 mb-6">
+            <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
+              <i class="fa fa-leaf text-white text-xl"></i>
+            </div>
+            <span class="font-display font-bold text-2xl">PVZ Python</span>
+          </div>
+          <p class="text-gray-400 mb-6">
+            经典游戏《植物大战僵尸》的Python中文复刻版，开源免费，让经典重现。
+          </p>
+          <div class="flex space-x-4">
+            <a href="https://gitcode.com/ZZJ-JACK/Pvz" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+              <i class="fa fa-code-fork text-xl"></i>
+            </a>
+            <a href="https://zzjjack.us.kg" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+              <i class="fa fa-globe text-xl"></i>
+            </a>
+            <a href="mailto:zzjjack@zzjjack.us.kg" class="text-gray-400 hover:text-white transition-colors">
+              <i class="fa fa-envelope text-xl"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div>
+          <h3 class="font-bold text-lg mb-6">快速链接</h3>
+          <ul class="space-y-3">
+            <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">关于游戏</a></li>
+            <li><a href="#download" class="text-gray-400 hover:text-white transition-colors">下载</a></li>
+            <li><a href="#faq" class="text-gray-400 hover:text-white transition-colors">常见问题</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="font-bold text-lg mb-6">联系我们</h3>
+          <ul class="space-y-3">
+            <li class="flex items-start">
+              <i class="fa fa-envelope text-primary mt-1 mr-3"></i>
+              <span class="text-gray-400">zzjjack@zzjjack.us.kg</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-code-fork text-primary mt-1 mr-3"></i>
+              <span class="text-gray-400">gitcode.com/ZZJ-JACK/Pvz</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-globe text-primary mt-1 mr-3"></i>
+              <span class="text-gray-400">zzjjack.us.kg</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 pt-8 text-center text-gray-500 text-sm">
+        <p>© 2025 ZZJ-JACK. 本项目是非官方复刻版，与EA和PopCap Games无关。</p>
+        <p class="mt-2">官方网站: <a href="https://pvz.zzjjack.us.kg" class="text-primary hover:underline">pvz.zzjjack.us.kg</a></p>
+        <p class="mt-1">植物大战僵尸(PopCap Games)的商标和版权归Electronic Arts所有。</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 返回顶部按钮 -->
+  <button id="backToTop" class="fixed bottom-8 right-8 bg-primary hover:bg-primary/90 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+    <i class="fa fa-chevron-up"></i>
+  </button>
+
+  <!-- JavaScript -->
+  <script>
+    // 导航栏滚动效果
+    const navbar = document.getElementById('navbar');
+    const backToTop = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        navbar.classList.add('bg-gray-900/95', 'backdrop-blur-sm', 'shadow-md');
+        navbar.classList.remove('bg-transparent');
+        
+        backToTop.classList.remove('translate-y-20', 'opacity-0');
+        backToTop.classList.add('translate-y-0', 'opacity-100');
+      } else {
+        navbar.classList.remove('bg-gray-900/95', 'backdrop-blur-sm', 'shadow-md');
+        navbar.classList.add('bg-transparent');
+        
+        backToTop.classList.add('translate-y-20', 'opacity-0');
+        backToTop.classList.remove('translate-y-0', 'opacity-100');
+      }
+      
+      // 视差效果
+      const parallaxElements = document.querySelectorAll('.parallax');
+      parallaxElements.forEach(el => {
+        const speed = el.getAttribute('data-speed') || 0.2;
+        el.style.setProperty('--parallax-y', `${window.scrollY * speed}px`);
+      });
+      
+      // 滚动显示元素
+      revealOnScroll();
+    });
+    
+    // 移动端菜单
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    let menuOpen = false;
+    
+    menuBtn.addEventListener('click', () => {
+      if (menuOpen) {
+        mobileMenu.classList.add('-translate-y-full', 'opacity-0', 'pointer-events-none');
+        mobileMenu.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+        menuBtn.innerHTML = '<i class="fa fa-bars"></i>';
+      } else {
+        mobileMenu.classList.remove('-translate-y-full', 'opacity-0', 'pointer-events-none');
+        mobileMenu.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+        menuBtn.innerHTML = '<i class="fa fa-times"></i>';
+      }
+      menuOpen = !menuOpen;
+    });
+    
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // 关闭移动菜单（如果打开）
+        if (menuOpen) {
+          mobileMenu.classList.add('-translate-y-full', 'opacity-0', 'pointer-events-none');
+          mobileMenu.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+          menuBtn.innerHTML = '<i class="fa fa-bars"></i>';
+          menuOpen = false;
+        }
+        
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+    
+    // 返回顶部
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // FAQ 折叠功能
+    const faqToggles = document.querySelectorAll('.faq-toggle');
+    
+    faqToggles.forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const content = toggle.nextElementSibling;
+        const icon = toggle.querySelector('i');
+        
+        // 关闭其他所有FAQ项
+        document.querySelectorAll('.faq-content').forEach(item => {
+          if (item !== content && item.style.maxHeight) {
+            item.style.maxHeight = null;
+            item.style.paddingTop = '0';
+            item.previousElementSibling.querySelector('i').classList.remove('rotate-180');
+          }
+        });
+        
+        // 切换当前FAQ项
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null;
+          content.style.paddingTop = '0';
+          icon.classList.remove('rotate-180');
+        } else {
+          content.style.maxHeight = content.scrollHeight + 30 + 'px';
+          content.style.paddingTop = '1rem';
+          icon.classList.add('rotate-180');
+        }
+      });
+    });
+    
+    // 加载下载链接
+    function loadDownloadLinks() {
+      const downloadLinksContainer = document.getElementById('downloadLinks');
+      
+      fetch('downloads.txt')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('无法加载下载链接');
+          }
+          return response.text();
+        })
+        .then(text => {
+          const lines = text.split('\n');
+          let html = '';
+          
+          lines.forEach(line => {
+            if (line.trim() === '') return;
+            
+            const [version, url] = line.split(':');
+            if (version && url) {
+              html += `
+                <a href="${url.trim()}" class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-3 rounded-lg transition-colors">
+                  <i class="fa fa-download mr-2"></i> 版本 ${version.trim()}
+                </a>
+              `;
+            }
+          });
+          
+          if (html === '') {
+            html = '<div class="text-center text-red-500 py-4">没有找到可用的下载链接</div>';
+          }
+          
+          downloadLinksContainer.innerHTML = html;
+        })
+        .catch(error => {
+          downloadLinksContainer.innerHTML = `
+            <div class="text-center text-red-500 py-4">
+              <i class="fa fa-exclamation-triangle mr-2"></i>无法加载下载链接: ${error.message}
+            </div>
+          `;
+          console.error('加载下载链接失败:', error);
+        });
+    }
+    
+    // 滚动显示元素
+    function revealOnScroll() {
+      const elements = document.querySelectorAll('.reveal-element');
+      
+      elements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const elementVisible = 150;
+        
+        if (elementTop < window.innerHeight - elementVisible) {
+          element.classList.add('animate-fade-in-up');
+          element.style.opacity = '1';
+          element.style.transform = 'translateY(0)';
+        }
+      });
+    }
+    
+    // 初始化元素样式
+    document.addEventListener('DOMContentLoaded', () => {
+      const elements = document.querySelectorAll('.reveal-element');
+      
+      elements.forEach(element => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(30px)';
+        element.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+      });
+      
+      // 初始检查可见元素
+      revealOnScroll();
+      
+      // 加载下载链接
+      loadDownloadLinks();
+      
+      // 添加淡入动画类
+      document.head.insertAdjacentHTML('beforeend', `
+        <style>
+          @keyframes fadeInUp {
+            from {
+              opacity: 0;
+              transform: translateY(30px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+          }
+        </style>
+      `);
+    });
+  </script>
+</body>
+</html>
