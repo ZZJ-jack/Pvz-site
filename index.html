@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>植物大战僵尸-Python版</title>
+  <title>植物大战僵尸-Python复刻版</title>
   <!-- 引入外部资源 -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -148,9 +148,7 @@
       </div>
       
       <div class="grid md:grid-cols-2 gap-12 items-center">
-        <div class="reveal-element">
-          <img src="https://picsum.photos/id/106/600/400" alt="游戏截图" class="rounded-xl shadow-xl w-full h-auto transform hover:scale-[1.02] transition-transform duration-300">
-        </div>
+        <!-- 移除图片部分 -->
         <div class="space-y-6 reveal-element">
           <div class="flex items-start">
             <div class="bg-primary/10 p-3 rounded-full mr-4 mt-1">
@@ -192,6 +190,41 @@
             </div>
           </div>
         </div>
+        
+        <!-- 添加镜像信息 -->
+        <div class="space-y-6 reveal-element">
+          <div class="bg-gray-50 rounded-xl p-6">
+            <h3 class="font-display font-bold text-xl mb-4 text-center">镜像站点</h3>
+            <div class="space-y-3">
+              <div class="flex items-center justify-between bg-white p-3 rounded-lg">
+                <span class="text-gray-600">主镜像</span>
+                <a href="https://pvz.zzjjack.dpdns.org" target="_blank" class="text-primary hover:underline">pvz.zzjjack.dpdns.org</a>
+              </div>
+              <div class="flex items-center justify-between bg-white p-3 rounded-lg">
+                <span class="text-gray-600">备用镜像</span>
+                <a href="https://pvz.gocoding.dpdns.org" target="_blank" class="text-primary hover:underline">pvz.gocoding.dpdns.org</a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-gray-50 rounded-xl p-6">
+            <h3 class="font-display font-bold text-xl mb-4 text-center">代码仓库</h3>
+            <div class="space-y-3">
+              <div class="flex items-center justify-between bg-white p-3 rounded-lg">
+                <span class="text-gray-600">主仓库</span>
+                <a href="https://gitcode.com/ZZJ-JACK/Pvz" target="_blank" class="text-primary hover:underline">Gitcode</a>
+              </div>
+              <div class="flex items-center justify-between bg-white p-3 rounded-lg">
+                <span class="text-gray-600">镜像仓库</span>
+                <div class="flex space-x-2">
+                  <a href="https://gitee.com/zzj-jack/pvz" target="_blank" class="text-primary hover:underline">Gitee</a>
+                  <span class="text-gray-400">|</span>
+                  <a href="https://github.com/ZZJ-jack/Pvz" target="_blank" class="text-primary hover:underline">GitHub</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -207,14 +240,14 @@
         </p>
       </div>
       
-      <div class="max-w-2xl mx-auto">
-        <!-- Windows 版本 -->
+      <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
+        <!-- 安装版 -->
         <div class="bg-gray-50 rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2 transition-transform reveal-element">
           <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6 mx-auto">
-            <i class="fa fa-windows text-blue-600 text-3xl"></i>
+            <i class="fa fa-wrench text-blue-600 text-3xl"></i>
           </div>
-          <h3 class="font-display font-bold text-xl mb-2 text-center">Windows 版本</h3>
-          <p class="text-gray-600 text-center mb-6">支持 Windows 10 及以上版本</p>
+          <h3 class="font-display font-bold text-xl mb-2 text-center">安装版 (Setup)</h3>
+          <p class="text-gray-600 text-center mb-6">一键安装，自动创建快捷方式</p>
           <ul class="space-y-3 mb-8">
             <li class="flex items-center text-gray-600">
               <i class="fa fa-check text-primary mr-2"></i>
@@ -222,28 +255,50 @@
             </li>
             <li class="flex items-center text-gray-600">
               <i class="fa fa-check text-primary mr-2"></i>
-              <span>自动更新支持</span>
-            </li>
-            <li class="flex items-center text-gray-600">
-              <i class="fa fa-check text-primary mr-2"></i>
-              <span>64位系统优化</span>
+              <span>可选创建快捷方式</span>
             </li>
           </ul>
           
-          <div id="downloadLinks" class="space-y-4">
-            <!-- 下载链接将通过JavaScript从downloads.txt加载 -->
+          <div id="setupLinks" class="space-y-4">
+            <!-- 安装版下载链接将通过JavaScript加载 -->
             <div class="text-center text-gray-500 py-4">
-              <i class="fa fa-spinner fa-spin mr-2"></i>正在加载下载链接...
+              <i class="fa fa-spinner fa-spin mr-2"></i>正在加载安装版下载链接...
             </div>
           </div>
+        </div>
+        
+        <!-- 便携版 -->
+        <div class="bg-gray-50 rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2 transition-transform reveal-element">
+          <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6 mx-auto">
+            <i class="fa fa-laptop text-green-600 text-3xl"></i>
+          </div>
+          <h3 class="font-display font-bold text-xl mb-2 text-center">便携版 (Portable)</h3>
+          <p class="text-gray-600 text-center mb-6">推荐使用，无需安装，下载即用</p>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-center text-gray-600">
+              <i class="fa fa-check text-primary mr-2"></i>
+              <span>无需安装</span>
+            </li>
+            <li class="flex items-center text-gray-600">
+              <i class="fa fa-check text-primary mr-2"></i>
+              <span>下载即用</span>
+            </li>
+          </ul>
           
-          <div class="mt-8 text-center">
-            <a href="https://gitcode.com/ZZJ-JACK/Pvz" target="_blank" class="inline-flex items-center bg-gray-800 hover:bg-gray-900 text-white px-6 py-3 rounded-lg transition-colors">
-              <i class="fa fa-code-fork mr-3 text-xl"></i>
-              <span>查看 Gitcode 仓库</span>
-            </a>
+          <div id="portableLinks" class="space-y-4">
+            <!-- 便携版下载链接将通过JavaScript加载 -->
+            <div class="text-center text-gray-500 py-4">
+              <i class="fa fa-spinner fa-spin mr-2"></i>正在加载便携版下载链接...
+            </div>
           </div>
         </div>
+      </div>
+      
+      <div class="mt-12 text-center">
+        <a href="https://gitcode.com/ZZJ-JACK/Pvz" target="_blank" class="inline-flex items-center bg-gray-800 hover:bg-gray-900 text-white px-6 py-3 rounded-lg transition-colors">
+          <i class="fa fa-code-fork mr-3 text-xl"></i>
+          <span>查看 Gitcode 仓库</span>
+        </a>
       </div>
     </div>
   </section>
@@ -268,7 +323,7 @@
           </button>
           <div class="faq-content px-6 py-0 max-h-0 overflow-hidden transition-all duration-300">
             <div class="pb-4 text-gray-600">
-              PVZ Python 中文复刻版保留了原版的核心玩法和内容，但使用Python语言重新开发，优化了高清显示支持，适配现代操作系统，并提供完整的中文支持。
+              PVZ Python 中文复刻版保留了原版的核心玩法和内容，并在持续更新中，但使用Python语言重新开发，适配现代操作系统，并提供完整的中文支持。
             </div>
           </div>
         </div>
@@ -292,7 +347,11 @@
           </button>
           <div class="faq-content px-6 py-0 max-h-0 overflow-hidden transition-all duration-300">
             <div class="pb-4 text-gray-600">
-              只需下载Windows版本的安装程序，双击运行并按照提示完成安装即可。运行游戏需要系统安装Python 3.8或更高版本。
+              我们提供两种版本供您选择：
+              <br><br>
+              <strong>安装版 (Setup)</strong>：下载后双击运行安装程序，按照提示完成安装即可。安装版会自动创建桌面快捷方式。
+              <br><br>
+              <strong>便携版 (Portable)</strong>：下载后即可运行，无需安装。便携版适合需要随身携带游戏的用户，可以直接放在U盘中使用。
             </div>
           </div>
         </div>
@@ -304,7 +363,7 @@
           </button>
           <div class="faq-content px-6 py-0 max-h-0 overflow-hidden transition-all duration-300">
             <div class="pb-4 text-gray-600">
-              当然欢迎！项目托管在Gitcode上，你可以提交Issue报告bug或建议新功能，也可以Fork仓库并提交Pull Request贡献代码。关于素材贡献，请查看项目贡献指南中的具体要求。
+              当然欢迎！项目托管在Gitcode（Gitee和Github有镜像）上，你可以提交Issue报告bug或建议新功能，也可以Fork仓库并提交Pull Request贡献代码。关于素材贡献，请查看项目贡献指南中的具体要求。
             </div>
           </div>
         </div>
@@ -382,6 +441,7 @@
       <div class="border-t border-gray-800 pt-8 text-center text-gray-500 text-sm">
         <p>© 2025 ZZJ-JACK. 本项目是非官方复刻版，与EA和PopCap Games无关。</p>
         <p class="mt-2">官方网站: <a href="https://pvz.zzjjack.us.kg" class="text-primary hover:underline">pvz.zzjjack.us.kg</a></p>
+        <p class="mt-1">镜像网站: <a href="https://pvz.zzjjack.dpdns.org" class="text-primary hover:underline">pvz.zzjjack.dpdns.org</a> | <a href="https://pvz.gocoding.dpdns.org" class="text-primary hover:underline">pvz.gocoding.dpdns.org</a></p>
         <p class="mt-1">植物大战僵尸(PopCap Games)的商标和版权归Electronic Arts所有。</p>
       </div>
     </div>
@@ -499,9 +559,10 @@
       });
     });
     
-    // 加载下载链接 - 修正版
+    // 加载下载链接 - 优化版
     function loadDownloadLinks() {
-      const downloadLinksContainer = document.getElementById('downloadLinks');
+      const setupLinksContainer = document.getElementById('setupLinks');
+      const portableLinksContainer = document.getElementById('portableLinks');
       
       // 首先尝试从downloads.txt加载
       fetch('downloads.txt')
@@ -513,49 +574,77 @@
         })
         .then(text => {
           const lines = text.split('\n');
-          let html = '';
+          let setupHtml = '';
+          let portableHtml = '';
           
           lines.forEach(line => {
             if (line.trim() === '') return;
             
-            // 分割版本号和链接 (格式: V版本号:链接)
+            // 分割版本号和链接 (格式: V版本号-类型:链接)
             const separatorIndex = line.indexOf(':');
             if (separatorIndex > 0 && separatorIndex < line.length - 1) {
-              const version = line.substring(0, separatorIndex).trim();
+              const versionWithType = line.substring(0, separatorIndex).trim();
               const url = line.substring(separatorIndex + 1).trim();
               
-              // 确保URL是有效的
-              if (url.startsWith('http://') || url.startsWith('https://')) {
-                html += `
-                  <a href="${url}" target="_blank" class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-3 rounded-lg transition-colors">
-                    <i class="fa fa-download mr-2"></i> 版本 ${version}
-                  </a>
-                `;
+              // 提取版本号和类型
+              const versionMatch = versionWithType.match(/V([\d.]+)-(Setup|Portable)/i);
+              if (versionMatch) {
+                const versionNumber = versionMatch[1];
+                const type = versionMatch[2];
+                
+                // 确保URL是有效的
+                if (url.startsWith('http://') || url.startsWith('https://')) {
+                  const linkHtml = `
+                    <a href="${url}" target="_blank" class="block w-full ${type.toLowerCase() === 'setup' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-green-600 hover:bg-green-700'} text-white text-center py-3 rounded-lg transition-colors">
+                      <i class="fa fa-download mr-2"></i> 版本 ${versionNumber}
+                    </a>
+                  `;
+                  
+                  if (type.toLowerCase() === 'setup') {
+                    setupHtml += linkHtml;
+                  } else if (type.toLowerCase() === 'portable') {
+                    portableHtml += linkHtml;
+                  }
+                }
               }
             }
           });
           
           // 如果没有解析到链接，使用默认链接
-          if (html === '') {
-            html = getDefaultDownloadLinkHtml();
+          if (setupHtml === '' && portableHtml === '') {
+            setupHtml = getDefaultSetupLinkHtml();
+            portableHtml = getDefaultPortableLinkHtml();
           }
           
-          downloadLinksContainer.innerHTML = html;
+          setupLinksContainer.innerHTML = setupHtml || '<div class="text-center text-gray-500 py-4">暂无安装版下载</div>';
+          portableLinksContainer.innerHTML = portableHtml || '<div class="text-center text-gray-500 py-4">暂无便携版下载</div>';
         })
         .catch(error => {
           console.error('加载downloads.txt失败:', error);
           // 加载失败时使用默认链接
-          downloadLinksContainer.innerHTML = getDefaultDownloadLinkHtml();
+        //   setupLinksContainer.innerHTML = getDefaultSetupLinkHtml();
+        //   portableLinksContainer.innerHTML = getDefaultPortableLinkHtml();
         });
     }
     
-    // 生成默认下载链接HTML (使用提供的V2.4.6链接)
-    function getDefaultDownloadLinkHtml() {
+    // 生成默认安装版下载链接HTML
+    function getDefaultSetupLinkHtml() {
       return `
         <a href="https://gitcode.com/ZZJ-JACK/Pvz/releases/download/V2.4.6/Pvz-2.4.6-Setup.exe" 
            target="_blank" 
            class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-3 rounded-lg transition-colors">
-          <i class="fa fa-download mr-2"></i> 版本 V2.4.6
+          <i class="fa fa-download mr-2"></i> 版本 2.4.6
+        </a>
+      `;
+    }
+    
+    // 生成默认便携版下载链接HTML (使用V2.4.7作为默认)
+    function getDefaultPortableLinkHtml() {
+      return `
+        <a href="https://gitcode.com/ZZJ-JACK/Pvz/releases/download/V2.4.7/Pvz-V2.4.7-Portable.exe" 
+           target="_blank" 
+           class="block w-full bg-green-600 hover:bg-green-700 text-white text-center py-3 rounded-lg transition-colors">
+          <i class="fa fa-download mr-2"></i> 版本 2.4.7
         </a>
       `;
     }
