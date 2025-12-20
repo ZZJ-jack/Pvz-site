@@ -56,6 +56,15 @@
         transform: translateY(-5px);
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
       }
+      .qrcode-container {
+        transition: all 0.3s ease;
+      }
+      .qrcode-container:hover {
+        transform: scale(1.05);
+      }
+      .qrcode-img {
+        filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.1));
+      }
     }
     
     @keyframes float {
@@ -76,6 +85,14 @@
     }
     .animate-fade-in-up {
       animation: fadeInUp 0.6s ease-out forwards;
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(156, 39, 176, 0.3); }
+      50% { box-shadow: 0 0 30px rgba(156, 39, 176, 0.6); }
+    }
+    .animate-pulse-glow {
+      animation: pulse-glow 2s ease-in-out infinite;
     }
   </style>
   
@@ -172,7 +189,7 @@
       </div>
       
       <div class="grid md:grid-cols-2 gap-12 items-center">
-        <!-- 移除图片部分 -->
+        <!-- 游戏特性 -->
         <div class="space-y-6 reveal-element">
           <div class="flex items-start">
             <div class="bg-primary/10 p-3 rounded-full mr-4 mt-1">
@@ -215,35 +232,44 @@
           </div>
         </div>
         
-        <!-- 添加镜像信息 -->
+        <!-- 网站信息 -->
         <div class="space-y-6 reveal-element">
-          <div class="bg-gray-50 rounded-xl p-6">
-            <h3 class="font-display font-bold text-xl mb-4 text-center">镜像站点</h3>
+          <div class="bg-gradient-to-r from-primary/10 to-primary/5 rounded-xl p-6 border border-primary/20">
+            <h3 class="font-display font-bold text-xl mb-4 text-center text-primary">网站信息</h3>
             <div class="space-y-3">
-              <div class="flex items-center justify-between bg-white p-3 rounded-lg">
-                <span class="text-gray-600">主镜像</span>
-                <a href="https://pvz.zzjjack.dpdns.org" target="_blank" class="text-primary hover:underline">pvz.zzjjack.dpdns.org</a>
+              <div class="flex items-center justify-between bg-white p-3 rounded-lg border">
+                <span class="text-gray-600 font-medium">主网站</span>
+                <a href="https://plvz.qzz.io" target="_blank" class="text-primary hover:underline font-semibold">plvz.qzz.io</a>
               </div>
-              <div class="flex items-center justify-between bg-white p-3 rounded-lg">
-                <span class="text-gray-600">备用镜像</span>
-                <a href="https://pvz.gocoding.dpdns.org" target="_blank" class="text-primary hover:underline">pvz.gocoding.dpdns.org</a>
+              <div class="bg-blue-50 p-3 rounded-lg border border-blue-200">
+                <h4 class="font-medium text-blue-800 mb-2">镜像网站</h4>
+                <div class="space-y-2">
+                  <div class="flex items-center justify-between">
+                    <span class="text-gray-600 text-sm">镜像1</span>
+                    <a href="https://pvz.zzjjack.dpdns.org" target="_blank" class="text-blue-600 hover:underline text-sm">pvz.zzjjack.dpdns.org</a>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-gray-600 text-sm">镜像2</span>
+                    <a href="https://pvz.gocoding.dpdns.org" target="_blank" class="text-blue-600 hover:underline text-sm">pvz.gocoding.dpdns.org</a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
           
-          <div class="bg-gray-50 rounded-xl p-6">
+          <div class="bg-gray-50 rounded-xl p-6 border border-gray-200">
             <h3 class="font-display font-bold text-xl mb-4 text-center">代码仓库</h3>
             <div class="space-y-3">
-              <div class="flex items-center justify-between bg-white p-3 rounded-lg">
+              <div class="flex items-center justify-between bg-white p-3 rounded-lg border">
                 <span class="text-gray-600">主仓库</span>
                 <a href="https://gitcode.com/ZZJ-JACK/Pvz" target="_blank" class="text-primary hover:underline">Gitcode</a>
               </div>
-              <div class="flex items-center justify-between bg-white p-3 rounded-lg">
-                <span class="text-gray-600">镜像仓库</span>
-                <div class="flex space-x-2">
-                  <a href="https://gitee.com/zzj-jack/pvz" target="_blank" class="text-primary hover:underline">Gitee</a>
+              <div class="bg-gray-100 p-3 rounded-lg border border-gray-300">
+                <h4 class="font-medium text-gray-700 mb-2">镜像仓库</h4>
+                <div class="flex justify-between">
+                  <a href="https://gitee.com/zzj-jack/pvz" target="_blank" class="text-primary hover:underline text-sm">Gitee</a>
                   <span class="text-gray-400">|</span>
-                  <a href="https://github.com/ZZJ-jack/Pvz" target="_blank" class="text-primary hover:underline">GitHub</a>
+                  <a href="https://github.com/ZZJ-jack/Pvz" target="_blank" class="text-primary hover:underline text-sm">GitHub</a>
                 </div>
               </div>
             </div>
@@ -264,31 +290,82 @@
         </p>
       </div>
       
-      <!-- 赞赏统计 -->
-      <div class="max-w-4xl mx-auto mb-12">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="bg-white rounded-xl shadow-lg p-6 text-center reveal-element">
-            <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-4 mx-auto">
-              <i class="fa fa-heart text-support text-2xl"></i>
+      <!-- 赞赏统计和赞赏码 -->
+      <div class="max-w-6xl mx-auto mb-12">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- 赞赏统计 -->
+          <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white rounded-xl shadow-lg p-6 text-center reveal-element">
+              <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-4 mx-auto">
+                <i class="fa fa-heart text-support text-2xl"></i>
+              </div>
+              <h3 class="font-display font-bold text-2xl mb-2" id="totalDonations">0</h3>
+              <p class="text-gray-600">赞赏人数</p>
             </div>
-            <h3 class="font-display font-bold text-2xl mb-2" id="totalDonations">0</h3>
-            <p class="text-gray-600">赞赏人数</p>
+            
+            <div class="bg-white rounded-xl shadow-lg p-6 text-center reveal-element">
+              <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4 mx-auto">
+                <i class="fa fa-yen text-primary text-2xl"></i>
+              </div>
+              <h3 class="font-display font-bold text-2xl mb-2" id="totalAmount">0</h3>
+              <p class="text-gray-600">赞赏总额(元)</p>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-lg p-6 text-center reveal-element">
+              <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
+                <i class="fa fa-users text-blue-600 text-2xl"></i>
+              </div>
+              <h3 class="font-display font-bold text-2xl mb-2" id="averageAmount">0</h3>
+              <p class="text-gray-600">平均赞赏(元)</p>
+            </div>
+            
+            <!-- 赞赏说明 -->
+            <div class="md:col-span-3 bg-white rounded-xl shadow-lg p-6 reveal-element">
+              <h3 class="font-display font-bold text-xl mb-4">如何赞赏？</h3>
+              <div class="space-y-3 text-gray-600">
+                <p>如果您喜欢我们的项目并希望支持我们继续开发，可以通过以下方式赞赏：</p>
+                <ol class="list-decimal pl-5 space-y-2">
+                  <li>扫描右侧的赞赏码进行赞赏</li>
+                  <li>赞赏时请备注您的姓名或昵称（可选）</li>
+                  <li>赞赏金额不限，每一份支持都让我们感动</li>
+                  <li>您的赞赏将用于服务器维护和项目持续开发</li>
+                </ol>
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-2">
+                  <p class="text-yellow-800 text-sm"><strong>注意：</strong>赞赏纯属自愿行为，您仍然可以免费使用和下载所有游戏功能。</p>
+                </div>
+              </div>
+            </div>
           </div>
           
-          <div class="bg-white rounded-xl shadow-lg p-6 text-center reveal-element">
-            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4 mx-auto">
-              <i class="fa fa-yen text-primary text-2xl"></i>
+          <!-- 赞赏码 -->
+          <div class="reveal-element">
+            <div class="bg-white rounded-xl shadow-lg p-6 h-full qrcode-container">
+              <h3 class="font-display font-bold text-xl mb-4 text-center">赞赏码</h3>
+              <div class="text-center mb-4">
+                <p class="text-gray-600 mb-2">扫描二维码赞赏支持</p>
+                <p class="text-sm text-gray-500">感谢您的支持！</p>
+              </div>
+              
+              <div id="rewardCodeContainer" class="mb-4">
+                <div class="flex justify-center items-center h-64 bg-gray-100 rounded-lg">
+                  <div class="text-center">
+                    <i class="fa fa-spinner fa-spin text-3xl text-gray-400 mb-2"></i>
+                    <p class="text-gray-500">正在加载赞赏码...</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="text-center">
+                <div class="inline-flex items-center bg-support/10 text-support px-4 py-2 rounded-full">
+                  <i class="fa fa-qrcode mr-2"></i>
+                  <span>微信/支付宝赞赏码</span>
+                </div>
+              </div>
+              
+              <div class="mt-4 text-center">
+                <p class="text-sm text-gray-500">感谢您的每一份支持！</p>
+              </div>
             </div>
-            <h3 class="font-display font-bold text-2xl mb-2" id="totalAmount">0</h3>
-            <p class="text-gray-600">赞赏总额(元)</p>
-          </div>
-          
-          <div class="bg-white rounded-xl shadow-lg p-6 text-center reveal-element">
-            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
-              <i class="fa fa-users text-blue-600 text-2xl"></i>
-            </div>
-            <h3 class="font-display font-bold text-2xl mb-2" id="averageAmount">0</h3>
-            <p class="text-gray-600">平均赞赏(元)</p>
           </div>
         </div>
       </div>
@@ -305,23 +382,6 @@
           <div class="text-center text-gray-500 py-12 col-span-full">
             <i class="fa fa-spinner fa-spin text-3xl mb-4"></i>
             <p>正在加载赞赏者信息...</p>
-          </div>
-        </div>
-        
-        <!-- 赞赏说明 -->
-        <div class="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto reveal-element">
-          <h3 class="font-display font-bold text-xl mb-4 text-center">如何赞赏？</h3>
-          <div class="space-y-4 text-gray-600">
-            <p>如果您喜欢我们的项目并希望支持我们继续开发，可以通过以下方式赞赏：</p>
-            <ol class="list-decimal pl-5 space-y-2">
-              <li>扫描项目仓库中的赞赏码</li>
-              <li>赞赏时请备注您的姓名或昵称（可选）</li>
-              <li>赞赏金额不限，每一份支持都让我们感动</li>
-              <li>您的赞赏将用于服务器维护和项目持续开发</li>
-            </ol>
-            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
-              <p class="text-yellow-800"><strong>注意：</strong>赞赏纯属自愿行为，您仍然可以免费使用和下载所有游戏功能。</p>
-            </div>
           </div>
         </div>
       </div>
@@ -520,19 +580,28 @@
         </div>
         
         <div>
-          <h3 class="font-bold text-lg mb-6">联系我们</h3>
+          <h3 class="font-bold text-lg mb-6">网站信息</h3>
           <ul class="space-y-3">
             <li class="flex items-start">
-              <i class="fa fa-envelope text-primary mt-1 mr-3"></i>
-              <span class="text-gray-400">zzjjack@zzjjack.us.kg</span>
+              <i class="fa fa-globe text-primary mt-1 mr-3"></i>
+              <div>
+                <span class="text-gray-400 block">主网站:</span>
+                <a href="https://plvz.qzz.io" target="_blank" class="text-white hover:underline">plvz.qzz.io</a>
+              </div>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-link text-primary mt-1 mr-3"></i>
+              <div>
+                <span class="text-gray-400 block">镜像网站:</span>
+                <div class="text-sm">
+                  <a href="https://pvz.zzjjack.dpdns.org" target="_blank" class="text-gray-300 hover:text-white hover:underline block">pvz.zzjjack.dpdns.org</a>
+                  <a href="https://pvz.gocoding.dpdns.org" target="_blank" class="text-gray-300 hover:text-white hover:underline block">pvz.gocoding.dpdns.org</a>
+                </div>
+              </div>
             </li>
             <li class="flex items-start">
               <i class="fa fa-code-fork text-primary mt-1 mr-3"></i>
               <span class="text-gray-400">gitcode.com/ZZJ-JACK/Pvz</span>
-            </li>
-            <li class="flex items-start">
-              <i class="fa fa-globe text-primary mt-1 mr-3"></i>
-              <span class="text-gray-400">zzjjack.us.kg</span>
             </li>
           </ul>
         </div>
@@ -540,8 +609,15 @@
       
       <div class="border-t border-gray-800 pt-8 text-center text-gray-500 text-sm">
         <p>© 2025 ZZJ-JACK. 本项目是非官方复刻版，与EA和PopCap Games无关。</p>
-        <p class="mt-2">官方网站: <a href="https://pvz.zzjjack.us.kg" class="text-primary hover:underline">pvz.zzjjack.us.kg</a></p>
-        <p class="mt-1">镜像网站: <a href="https://pvz.zzjjack.dpdns.org" class="text-primary hover:underline">pvz.zzjjack.dpdns.org</a> | <a href="https://pvz.gocoding.dpdns.org" class="text-primary hover:underline">pvz.gocoding.dpdns.org</a></p>
+        <p class="mt-2">
+          <span class="font-medium">主网站:</span> 
+          <a href="https://plvz.qzz.io" class="text-primary hover:underline">plvz.qzz.io</a>
+          <span class="mx-2">|</span>
+          <span class="font-medium">镜像:</span>
+          <a href="https://pvz.zzjjack.dpdns.org" class="text-primary hover:underline">pvz.zzjjack.dpdns.org</a>
+          <span class="mx-2">|</span>
+          <a href="https://pvz.gocoding.dpdns.org" class="text-primary hover:underline">pvz.gocoding.dpdns.org</a>
+        </p>
         <p class="mt-1">植物大战僵尸(PopCap Games)的商标和版权归Electronic Arts所有。</p>
       </div>
     </div>
@@ -659,7 +735,7 @@
       });
     });
     
-    // 加载下载链接 - 优化版
+    // 加载下载链接
     function loadDownloadLinks() {
       const setupLinksContainer = document.getElementById('setupLinks');
       const portableLinksContainer = document.getElementById('portableLinks');
@@ -863,7 +939,7 @@
         })
         .catch(error => {
           console.error('加载give.txt失败:', error);
-          // 加载失败时显示默认信息
+          // 加载失败时显示示例信息
           const exampleDonations = [
             { name: "热心玩家A", amount: 5, formattedAmount: "5元" },
             { name: "匿名用户", amount: 10, formattedAmount: "10元" },
@@ -937,6 +1013,49 @@
         });
     }
     
+    // 加载赞赏码图片
+    function loadRewardCode() {
+      const rewardCodeContainer = document.getElementById('rewardCodeContainer');
+      
+      // 尝试加载reward.png
+      const rewardImg = new Image();
+      rewardImg.onload = function() {
+        rewardCodeContainer.innerHTML = `
+          <div class="flex justify-center">
+            <img src="reward.png" alt="赞赏码" class="qrcode-img max-w-full h-auto rounded-lg border-4 border-white shadow-lg">
+          </div>
+        `;
+      };
+      
+      rewardImg.onerror = function() {
+        // 如果加载失败，显示默认图片和下载链接
+        rewardCodeContainer.innerHTML = `
+          <div class="text-center">
+            <div class="bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg p-8 mb-4">
+              <i class="fa fa-qrcode text-6xl text-purple-400 mb-4"></i>
+              <p class="text-gray-600 mb-2">赞赏码加载失败</p>
+              <p class="text-sm text-gray-500 mb-4">请确保网站目录下有 reward.png 文件</p>
+              <a href="https://gitcode.com/ZZJ-JACK/Pvz/raw/main/reward.png" 
+                 target="_blank" 
+                 class="inline-flex items-center bg-support hover:bg-support/90 text-white px-4 py-2 rounded-lg transition-colors text-sm">
+                <i class="fa fa-external-link mr-2"></i>
+                查看赞赏码
+              </a>
+            </div>
+          </div>
+        `;
+      };
+      
+      rewardImg.src = 'reward.png';
+      
+      // 添加超时处理
+      setTimeout(() => {
+        if (rewardImg.complete === false) {
+          rewardImg.onerror();
+        }
+      }, 3000);
+    }
+    
     // 滚动显示元素
     function revealOnScroll() {
       const elements = document.querySelectorAll('.reveal-element');
@@ -971,6 +1090,9 @@
       
       // 加载赞赏信息
       loadDonationInfo();
+      
+      // 加载赞赏码
+      loadRewardCode();
     });
   </script>
 </body>
