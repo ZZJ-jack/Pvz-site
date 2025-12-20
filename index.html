@@ -19,6 +19,7 @@
             accent: '#F44336',      // 强调红色 - 警告/特殊元素
             dark: '#1B5E20',        // 深绿色
             light: '#E8F5E9',       // 浅绿色背景
+            support: '#9C27B0',     // 赞赏主题紫色
           },
           fontFamily: {
             sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -48,12 +49,33 @@
         transform: translateY(var(--parallax-y, 0));
         transition: transform 0.1s ease-out;
       }
+      .donation-item {
+        transition: all 0.3s ease;
+      }
+      .donation-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
     }
     
     @keyframes float {
       0% { transform: translateY(0px); }
       50% { transform: translateY(-20px); }
       100% { transform: translateY(0px); }
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fade-in-up {
+      animation: fadeInUp 0.6s ease-out forwards;
     }
   </style>
   
@@ -76,6 +98,7 @@
       <nav class="hidden md:flex items-center space-x-8">
         <a href="#about" class="text-white hover:text-primary/80 transition-colors font-medium">关于游戏</a>
         <a href="#download" class="text-white hover:text-primary/80 transition-colors font-medium">下载</a>
+        <a href="#donation" class="text-white hover:text-primary/80 transition-colors font-medium">赞赏支持</a>
         <a href="#faq" class="text-white hover:text-primary/80 transition-colors font-medium">常见问题</a>
         <a href="https://gitcode.com/ZZJ-JACK/Pvz" target="_blank" class="bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-full transition-all transform hover:scale-105">
           <i class="fa fa-code-fork mr-2"></i>Gitcode
@@ -93,6 +116,7 @@
       <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
         <a href="#about" class="text-gray-800 hover:text-primary py-2 border-b border-gray-100">关于游戏</a>
         <a href="#download" class="text-gray-800 hover:text-primary py-2 border-b border-gray-100">下载</a>
+        <a href="#donation" class="text-gray-800 hover:text-primary py-2 border-b border-gray-100">赞赏支持</a>
         <a href="#faq" class="text-gray-800 hover:text-primary py-2">常见问题</a>
         <a href="https://gitcode.com/ZZJ-JACK/Pvz" target="_blank" class="bg-primary hover:bg-primary/90 text-white px-5 py-3 rounded-full text-center transition-all">
           <i class="fa fa-code-fork mr-2"></i>Gitcode
@@ -222,6 +246,81 @@
                   <a href="https://github.com/ZZJ-jack/Pvz" target="_blank" class="text-primary hover:underline">GitHub</a>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 赞赏支持 -->
+  <section id="donation" class="py-20 bg-gradient-to-br from-purple-50 to-indigo-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16 reveal-element">
+        <h2 class="font-display font-bold text-[clamp(1.8rem,5vw,3rem)] text-gray-800 mb-4">赞赏支持</h2>
+        <div class="w-24 h-1 bg-support mx-auto mb-6"></div>
+        <p class="text-gray-600 max-w-3xl mx-auto text-lg">
+          感谢以下热心玩家的支持！您的赞赏将帮助我们更好地维护和更新游戏。
+        </p>
+      </div>
+      
+      <!-- 赞赏统计 -->
+      <div class="max-w-4xl mx-auto mb-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-white rounded-xl shadow-lg p-6 text-center reveal-element">
+            <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-4 mx-auto">
+              <i class="fa fa-heart text-support text-2xl"></i>
+            </div>
+            <h3 class="font-display font-bold text-2xl mb-2" id="totalDonations">0</h3>
+            <p class="text-gray-600">赞赏人数</p>
+          </div>
+          
+          <div class="bg-white rounded-xl shadow-lg p-6 text-center reveal-element">
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4 mx-auto">
+              <i class="fa fa-yen text-primary text-2xl"></i>
+            </div>
+            <h3 class="font-display font-bold text-2xl mb-2" id="totalAmount">0</h3>
+            <p class="text-gray-600">赞赏总额(元)</p>
+          </div>
+          
+          <div class="bg-white rounded-xl shadow-lg p-6 text-center reveal-element">
+            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
+              <i class="fa fa-users text-blue-600 text-2xl"></i>
+            </div>
+            <h3 class="font-display font-bold text-2xl mb-2" id="averageAmount">0</h3>
+            <p class="text-gray-600">平均赞赏(元)</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 赞赏者列表 -->
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-8 reveal-element">
+          <h3 class="font-display font-bold text-2xl mb-4">热心玩家</h3>
+          <p class="text-gray-600">感谢每一位支持项目的玩家，你们的支持是我们持续更新的动力！</p>
+        </div>
+        
+        <div id="donationList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          <!-- 赞赏者列表将通过JavaScript动态加载 -->
+          <div class="text-center text-gray-500 py-12 col-span-full">
+            <i class="fa fa-spinner fa-spin text-3xl mb-4"></i>
+            <p>正在加载赞赏者信息...</p>
+          </div>
+        </div>
+        
+        <!-- 赞赏说明 -->
+        <div class="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto reveal-element">
+          <h3 class="font-display font-bold text-xl mb-4 text-center">如何赞赏？</h3>
+          <div class="space-y-4 text-gray-600">
+            <p>如果您喜欢我们的项目并希望支持我们继续开发，可以通过以下方式赞赏：</p>
+            <ol class="list-decimal pl-5 space-y-2">
+              <li>扫描项目仓库中的赞赏码</li>
+              <li>赞赏时请备注您的姓名或昵称（可选）</li>
+              <li>赞赏金额不限，每一份支持都让我们感动</li>
+              <li>您的赞赏将用于服务器维护和项目持续开发</li>
+            </ol>
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+              <p class="text-yellow-800"><strong>注意：</strong>赞赏纯属自愿行为，您仍然可以免费使用和下载所有游戏功能。</p>
             </div>
           </div>
         </div>
@@ -415,6 +514,7 @@
           <ul class="space-y-3">
             <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">关于游戏</a></li>
             <li><a href="#download" class="text-gray-400 hover:text-white transition-colors">下载</a></li>
+            <li><a href="#donation" class="text-gray-400 hover:text-white transition-colors">赞赏支持</a></li>
             <li><a href="#faq" class="text-gray-400 hover:text-white transition-colors">常见问题</a></li>
           </ul>
         </div>
@@ -622,8 +722,8 @@
         .catch(error => {
           console.error('加载downloads.txt失败:', error);
           // 加载失败时使用默认链接
-        //   setupLinksContainer.innerHTML = getDefaultSetupLinkHtml();
-        //   portableLinksContainer.innerHTML = getDefaultPortableLinkHtml();
+          setupLinksContainer.innerHTML = getDefaultSetupLinkHtml();
+          portableLinksContainer.innerHTML = getDefaultPortableLinkHtml();
         });
     }
     
@@ -647,6 +747,194 @@
           <i class="fa fa-download mr-2"></i> 版本 2.4.7
         </a>
       `;
+    }
+    
+    // 加载赞赏信息
+    function loadDonationInfo() {
+      const donationListContainer = document.getElementById('donationList');
+      const totalDonationsEl = document.getElementById('totalDonations');
+      const totalAmountEl = document.getElementById('totalAmount');
+      const averageAmountEl = document.getElementById('averageAmount');
+      
+      // 首先尝试从give.txt加载
+      fetch('give.txt')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('无法加载赞赏信息文件');
+          }
+          return response.text();
+        })
+        .then(text => {
+          const lines = text.split('\n');
+          let donations = [];
+          let totalAmount = 0;
+          let totalDonations = 0;
+          
+          // 解析每行数据，格式为：姓名 金额元
+          lines.forEach(line => {
+            if (line.trim() === '') return;
+            
+            // 尝试匹配 "姓名 金额元" 格式
+            const match = line.match(/(.+?)\s+([\d.]+)(元)?$/);
+            if (match) {
+              const name = match[1].trim();
+              const amount = parseFloat(match[2]);
+              
+              if (!isNaN(amount) && amount > 0) {
+                donations.push({
+                  name: name,
+                  amount: amount,
+                  formattedAmount: amount.toFixed(amount % 1 === 0 ? 0 : 2) + '元'
+                });
+                totalAmount += amount;
+                totalDonations++;
+              }
+            }
+          });
+          
+          // 更新统计数据
+          totalDonationsEl.textContent = totalDonations;
+          totalAmountEl.textContent = totalAmount.toFixed(2);
+          averageAmountEl.textContent = totalDonations > 0 ? (totalAmount / totalDonations).toFixed(2) : '0';
+          
+          // 生成赞赏者列表HTML
+          let donationsHtml = '';
+          if (donations.length > 0) {
+            // 按金额降序排序
+            donations.sort((a, b) => b.amount - a.amount);
+            
+            donations.forEach((donation, index) => {
+              // 根据金额大小决定颜色和图标
+              let bgColor = 'bg-purple-100';
+              let textColor = 'text-purple-700';
+              let icon = 'fa-heart';
+              
+              if (donation.amount >= 50) {
+                bgColor = 'bg-red-100';
+                textColor = 'text-red-700';
+                icon = 'fa-star';
+              } else if (donation.amount >= 20) {
+                bgColor = 'bg-orange-100';
+                textColor = 'text-orange-700';
+                icon = 'fa-gem';
+              } else if (donation.amount >= 10) {
+                bgColor = 'bg-yellow-100';
+                textColor = 'text-yellow-700';
+                icon = 'fa-certificate';
+              }
+              
+              donationsHtml += `
+                <div class="donation-item reveal-element" style="animation-delay: ${index * 0.1}s">
+                  <div class="bg-white rounded-xl shadow-md p-6 h-full">
+                    <div class="flex items-center mb-4">
+                      <div class="${bgColor} w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                        <i class="fa ${icon} ${textColor} text-lg"></i>
+                      </div>
+                      <div>
+                        <h4 class="font-bold text-lg">${donation.name}</h4>
+                        <p class="${textColor} font-semibold">${donation.formattedAmount}</p>
+                      </div>
+                    </div>
+                    <div class="text-right text-sm text-gray-500">
+                      ${donation.amount >= 50 ? '慷慨赞助' : donation.amount >= 20 ? '热心支持' : donation.amount >= 10 ? '友情支持' : '心意支持'}
+                    </div>
+                  </div>
+                </div>
+              `;
+            });
+          } else {
+            donationsHtml = `
+              <div class="col-span-full text-center py-12 reveal-element">
+                <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <i class="fa fa-gift text-gray-400 text-3xl"></i>
+                </div>
+                <h4 class="text-xl font-bold mb-2">暂无赞赏记录</h4>
+                <p class="text-gray-600 max-w-md mx-auto">成为第一个赞赏支持我们的人吧！</p>
+              </div>
+            `;
+          }
+          
+          donationListContainer.innerHTML = donationsHtml;
+          
+          // 添加淡入动画
+          document.querySelectorAll('.reveal-element').forEach((el, index) => {
+            el.style.animationDelay = `${index * 0.1}s`;
+          });
+        })
+        .catch(error => {
+          console.error('加载give.txt失败:', error);
+          // 加载失败时显示默认信息
+          const exampleDonations = [
+            { name: "热心玩家A", amount: 5, formattedAmount: "5元" },
+            { name: "匿名用户", amount: 10, formattedAmount: "10元" },
+            { name: "游戏爱好者", amount: 20, formattedAmount: "20元" },
+            { name: "PVZ粉丝", amount: 50, formattedAmount: "50元" },
+            { name: "开源支持者", amount: 100, formattedAmount: "100元" }
+          ];
+          
+          let exampleHtml = '';
+          let totalAmount = 0;
+          
+          exampleDonations.forEach((donation, index) => {
+            totalAmount += donation.amount;
+            
+            let bgColor = 'bg-purple-100';
+            let textColor = 'text-purple-700';
+            let icon = 'fa-heart';
+            
+            if (donation.amount >= 50) {
+              bgColor = 'bg-red-100';
+              textColor = 'text-red-700';
+              icon = 'fa-star';
+            } else if (donation.amount >= 20) {
+              bgColor = 'bg-orange-100';
+              textColor = 'text-orange-700';
+              icon = 'fa-gem';
+            } else if (donation.amount >= 10) {
+              bgColor = 'bg-yellow-100';
+              textColor = 'text-yellow-700';
+              icon = 'fa-certificate';
+            }
+            
+            exampleHtml += `
+              <div class="donation-item reveal-element" style="animation-delay: ${index * 0.1}s">
+                <div class="bg-white rounded-xl shadow-md p-6 h-full">
+                  <div class="flex items-center mb-4">
+                    <div class="${bgColor} w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                      <i class="fa ${icon} ${textColor} text-lg"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-bold text-lg">${donation.name}</h4>
+                      <p class="${textColor} font-semibold">${donation.formattedAmount}</p>
+                    </div>
+                  </div>
+                  <div class="text-right text-sm text-gray-500">
+                    ${donation.amount >= 50 ? '慷慨赞助' : donation.amount >= 20 ? '热心支持' : donation.amount >= 10 ? '友情支持' : '心意支持'}
+                  </div>
+                </div>
+              </div>
+            `;
+          });
+          
+          donationListContainer.innerHTML = exampleHtml;
+          totalDonationsEl.textContent = exampleDonations.length;
+          totalAmountEl.textContent = totalAmount.toFixed(2);
+          averageAmountEl.textContent = (totalAmount / exampleDonations.length).toFixed(2);
+          
+          // 添加说明
+          const noteHtml = `
+            <div class="col-span-full text-center py-6 reveal-element">
+              <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 inline-block">
+                <p class="text-yellow-800 text-sm">
+                  <i class="fa fa-info-circle mr-2"></i>
+                  当前显示的是示例数据。请确保您的网站目录下有 <code class="bg-yellow-100 px-2 py-1 rounded">give.txt</code> 文件，格式为：姓名 金额元
+                </p>
+              </div>
+            </div>
+          `;
+          
+          donationListContainer.insertAdjacentHTML('beforeend', noteHtml);
+        });
     }
     
     // 滚动显示元素
@@ -681,24 +969,8 @@
       // 加载下载链接
       loadDownloadLinks();
       
-      // 添加淡入动画类
-      document.head.insertAdjacentHTML('beforeend', `
-        <style>
-          @keyframes fadeInUp {
-            from {
-              opacity: 0;
-              transform: translateY(30px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
-          .animate-fade-in-up {
-            animation: fadeInUp 0.6s ease-out forwards;
-          }
-        </style>
-      `);
+      // 加载赞赏信息
+      loadDonationInfo();
     });
   </script>
 </body>
