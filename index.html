@@ -810,7 +810,8 @@
         function loadDownloadLinks() {
             const setupLinksContainer = document.getElementById('setupLinks');
             const portableLinksContainer = document.getElementById('portableLinks');
-            const githubLinksContainer = document.getElementById('githubLinks');
+            const githubSetupLinksContainer = document.getElementById('githubSetupLinks'); // 新增
+            const githubPortableLinksContainer = document.getElementById('githubPortableLinks'); // 新增
 
             // 首先尝试从downloads.txt加载
             fetch('downloads.txt')
@@ -905,67 +906,56 @@
                         portableHtml = '<div class="text-center text-gray-500 py-4">暂无便携版下载</div>';
                     }
 
-                    // 生成GitHub链接HTML (分开显示安装版和便携版，从新到旧排序)
-                    let githubHtml = '';
-                    if (githubSetupLinks.length > 0 || githubPortableLinks.length > 0) {
-                        // 获取所有GitHub版本号
-                        const allGithubVersions = [...new Set([
-                            ...githubSetupLinks.map(link => link.version),
-                            ...githubPortableLinks.map(link => link.version)
-                        ])];
-
-                        // 按版本号从大到小排序
-                        allGithubVersions.sort((a, b) => {
-                            const aNum = parseFloat(a.replace(/[^\d.]/g, ''));
-                            const bNum = parseFloat(b.replace(/[^\d.]/g, ''));
-                            return bNum - aNum;
-                        });
-
-                        // 为每个版本生成链接
-                        allGithubVersions.forEach(version => {
-                            const setupLink = githubSetupLinks.find(link => link.version === version);
-                            const portableLink = githubPortableLinks.find(link => link.version === version);
-
-                            // 如果有安装版，先显示安装版
-                            if (setupLink) {
-                                githubHtml += `
-              <a href="${setupLink.url}" target="_blank" class="block w-full bg-purple-700 hover:bg-purple-800 text-white text-center py-3 rounded-lg transition-colors mb-2">
-                <i class="fa fa-download mr-2"></i> 版本 ${version} (Setup)
-              </a>
-            `;
-                            }
-
-                            // 如果有便携版，显示便携版
-                            if (portableLink) {
-                                githubHtml += `
-              <a href="${portableLink.url}" target="_blank" class="block w-full bg-purple-600 hover:bg-purple-700 text-white text-center py-3 rounded-lg transition-colors mb-2">
-                <i class="fa fa-download mr-2"></i> 版本 ${version} (Portable)
-              </a>
-            `;
-                            }
-
-                            // 在版本之间添加分隔线（除了最后一个版本）
-                            if (version !== allGithubVersions[allGithubVersions.length - 1]) {
-                                githubHtml += `<div class="h-2"></div>`;
-                            }
+                    // 生成GitHub安装版HTML
+                    let githubSetupHtml = '';
+                    if (githubSetupLinks.length > 0) {
+                        githubSetupLinks.forEach(link => {
+                            githubSetupHtml += `
+            <a href="${link.url}" target="_blank" class="block w-full bg-purple-700 hover:bg-purple-800 text-white text-center py-3 rounded-lg transition-colors">
+              <i class="fa fa-download mr-2"></i> 版本 ${link.version}
+            </a>
+          `;
                         });
                     } else {
-                        githubHtml = '<div class="text-center text-gray-400 py-4">暂无GitHub下载链接</div>';
+                        githubSetupHtml = '<div class="text-center text-gray-400 py-4">无</div>';
                     }
 
+                    // 生成GitHub便携版HTML
+                    let githubPortableHtml = '';
+                    if (githubPortableLinks.length > 0) {
+                        githubPortableLinks.forEach(link => {
+                            githubPortableHtml += `
+            <a href="${link.url}" target="_blank" class="block w-full bg-purple-600 hover:bg-purple-700 text-white text-center py-3 rounded-lg transition-colors">
+              <i class="fa fa-download mr-2"></i> 版本 ${link.version}
+            </a>
+          `;
+                        });
+                    } else {
+                        githubPortableHtml = '<div class="text-center text-gray-400 py-4">无</div>';
+                    }
+
+                    // 更新所有容器
                     setupLinksContainer.innerHTML = setupHtml;
                     portableLinksContainer.innerHTML = portableHtml;
-                    githubLinksContainer.innerHTML = githubHtml;
+                    githubSetupLinksContainer.innerHTML = githubSetupHtml; // 修正这里
+                    githubPortableLinksContainer.innerHTML = githubPortableHtml; // 修正这里
                 })
                 .catch(error => {
                     console.error('加载downloads.txt失败:', error);
                     // 加载失败时不显示默认链接
                     setupLinksContainer.innerHTML = '<div class="text-center text-gray-500 py-4">加载下载链接失败</div>';
                     portableLinksContainer.innerHTML = '<div class="text-center text-gray-500 py-4">加载下载链接失败</div>';
-                    githubLinksContainer.innerHTML = '<div class="text-center text-gray-400 py-4">加载下载链接失败</div>';
+                    // 修正这里：需要获取正确的元素
+                    const githubSetupLinksContainer = document.getElementById('githubSetupLinks');
+                    const githubPortableLinksContainer = document.getElementById('githubPortableLinks');
+                    if (githubSetupLinksContainer) {
+                        githubSetupLinksContainer.innerHTML = '<div class="text-center text-gray-400 py-4">加载下载链接失败</div>';
+                    }
+                    if (githubPortableLinksContainer) {
+                        githubPortableLinksContainer.innerHTML = '<div class="text-center text-gray-400 py-4">加载下载链接失败</div>';
+                    }
                 });
         }
-
 
         // 加载赞赏信息
         function loadDonationInfo() {
